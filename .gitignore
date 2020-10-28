@@ -1,0 +1,27 @@
+# IDE
+*.pyc
+__pycache__/*.pyc
+.idea/
+
+# Migrations
+# purbeurre/migrations/*
+
+# test
+htmlcov/
+/.coverage
+/.coveragerc
+geckodriver.log
+
+# data
+# dump/data.json
+log_bdd_inputs.txt
+
+# prod
+website/settings/production.py
+website/settings/mail_config.py
+
+# conf
+newrelic.ini
+
+# SSL
+ssl/

@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Mon compte{% endblock %}
+
+{% block content %}
+<div id="content" class="header_account">
+  <div class="text-center text-white">
+    <h2 class="account-page-section">AHOY</h2>
+  </div>
+  <div class="text-center text-white">
+    <h3 class="active_padding">{{ user.first_name }}</h3>
+  </div>
+</div>
+
+
+<section class="standard">
+  <div class="container">
+    <div class="text-center text-white">
+      <figure class="justify-content-center text-center">
+        <img class="user_profile_picture active_padding" src="{% static 'assets/img/user_pic.png' %}">
+      </figure>
+    </div>
+    <h3 class="text-center active_padding">
+      {{ user.email }}
+    </h3>
+  </div>
+</section>
+
+{% endblock %}

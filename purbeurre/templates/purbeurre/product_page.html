@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Fiche produit{% endblock %}
+
+{% block content %}
+
+
+<div id="content" class="product_description_background">
+  <div class="text-center text-white ">
+    <h2 class="page-section">
+      {{ product_description.name }}
+    </h2>
+  </div>
+</div>
+
+
+<div class="row">
+  <div class="col-xs-12, col-sm-6, col-md-6, col-lg-6 ml-auto text-center nutritional_score_block">
+    <img src="https://static.openfoodfacts.org/images/misc/nutriscore-{{ product_description.nutriscore }}.png">
+  </div>
+
+  <div class="col-xs-12, col-sm-6, col-md-6, col-lg-6 ml-auto text-center nutritional_info_block">
+    <h3>Informations nutritionelles</h3>
+      <img class="nutritional_info_pic" src ={{ product_description.nutrition_image }}>
+  </div>
+</div>
+
+<div class="text-center col-sm-12">
+  <form class="form-inline my-2 my-lg-0 justify-content-center" role="form" method="post"
+        action="{{ product_description.link }}" id="post-form">
+    {% csrf_token %}
+      <button type="submit" class="btn btn-info active_padding">
+        <h4>
+          Voir la fiche d'OpenFoodFacts
+        </h4>
+      </button>
+  </form>
+</div>
+
+
+{% endblock %}
