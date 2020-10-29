@@ -19,3 +19,5 @@ branches:
 
 addons:
   chrome: stable
+
+sudo: required
