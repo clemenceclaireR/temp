@@ -1,5 +1,5 @@
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
-from selenium.webdriver.firefox.webdriver import WebDriver
+from selenium import webdriver
 from django.contrib.auth.models import User
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import WebDriverWait
@@ -17,7 +17,9 @@ class SeleniumTest(StaticLiveServerTestCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
-        cls.selenium = WebDriver()
+        options = webdriver.ChromeOptions()
+        options.add_experimental_option("excludeSwitches", ["enable-logging"])
+        cls.selenium = webdriver.Chrome(options=options)
         cls.selenium.implicitly_wait(10)
 
         cls.user = User.objects.create_user(username="test",
@@ -38,32 +40,25 @@ class SeleniumTest(StaticLiveServerTestCase):
         cls.selenium.quit()
         super().tearDownClass()
 
-    def test_login(self):
+    @classmethod
+    def test_login(cls):
         """
         Takes user to login form with its data
         """
-        self.selenium.get('%s%s' % (self.live_server_url, '/login/'))
-        username_input = self.selenium.find_element_by_name("email")
+        cls.selenium.get('%s%s' % (cls.live_server_url, '/login/'))
+        username_input = cls.selenium.find_element_by_name("email")
         username_input.send_keys('test@user.fr')
-        password_input = self.selenium.find_element_by_name("password")
+        password_input = cls.selenium.find_element_by_name("password")
         password_input.send_keys('password')
-        try:
-            self.selenium.find_element_by_xpath('//input[@value="Connexion"]').click()
-        except Exception:
-            pass
-        #self.selenium.execute_script("arguments[0].click();", button)
-        #validate = self.selenium.find_element_by_id('connexion')
-        #validate.send_keys(Keys.RETURN)
-        # WebDriverWait(self.selenium, 20).until(EC.visibility_of_element_located((By.XPATH,
-        #                                                             '//input[@value="Connexion"]')))
-        #
-        # self.selenium.find_element_by_xpath('//input[@value="Connexion"]').click()
+        cls.selenium.find_element_by_xpath('//input[@value="Connexion"]').click()
 
-    def test_search_form(self):
+    @classmethod
+    def test_search_form(cls):
         """
         Takes user to search form with a product name to put inside form
         """
-        self.selenium.get('%s%s' % (self.live_server_url, '/'))
-        form_input = self.selenium.find_element_by_id("id_research")
-        form_input.send_keys('noix de coco')
-        form_input.send_keys(Keys.RETURN)
+        cls.selenium.get('%s%s' % (cls.live_server_url, '/'))
+        form_input = cls.selenium.find_element_by_id("id_research")
+        # form_input.send_keys('noix de coco')
+        # self.selenium.find_element_by_xpath('//input[@id="chercher"]').click()
+        #form_input.send_keys(Keys.RETURN)

@@ -17,4 +17,5 @@ branches:
   only:
     - staging
 
-
+addons:
+  chrome: stable
