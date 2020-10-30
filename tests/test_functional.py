@@ -64,11 +64,15 @@ class SeleniumTest(StaticLiveServerTestCase):
         Takes user to search form with a product name to put inside form
         """
         cls.selenium.get('%s%s' % (cls.live_server_url, '/'))
-        form_input = cls.selenium.find_element_by_id("id_research")
+        #form_input = cls.selenium.find_element_by_id("id_research")
+        #try:
+        form_input =cls.selenium.find_element_by_xpath\
+                ('//div[@id="searchform"]/form[@role="form"]/input[@id="id_research"]')
         form_input.send_keys('noix de coco')
-        #cls.selenium.find_element_by_xpath('//input[@id="chercher"]').click()
-        try:
-            form_input.send_keys(Keys.RETURN)
-        except:
-            button = cls.selenium.find_element_by_xpath('//input[@id="chercher"]')
-            ActionChains(cls.selenium).move_to_element_with_offset(button, 0, -100).click().perform()
+        form_input.send_keys(Keys.RETURN)
+       # except:
+            #form_input =cls.selenium.find_element_by_xpath('//input[@id="id_research"]')
+            #ActionChains(cls.selenium).move_to_element_with_offset(form_input, 0, -100)\
+             #   .send_keys('noix de coco').perform()
+           # ActionChains(cls.selenium).move_to_element_with_offset(form_input, 0, -100)\
+            #    .send_keys(Keys.RETURN).perform()
