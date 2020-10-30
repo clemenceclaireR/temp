@@ -5,6 +5,7 @@ from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.common.action_chains import ActionChains
 from purbeurre.models.products import Products
 from purbeurre.models.categories import Categories
 
@@ -56,14 +57,9 @@ class SeleniumTest(StaticLiveServerTestCase):
         password_input.send_keys('password')
         try:
             cls.selenium.find_element_by_xpath('//input[@value="Connexion"]').click()
-        except Exception :
-        # self.selenium.execute_script("arguments[0].click();", button)
-        # validate = self.selenium.find_element_by_id('connexion')
-        # validate.send_keys(Keys.RETURN)
-            WebDriverWait(cls.selenium, 20).until(EC.visibility_of_element_located((By.XPATH,
-                                                                    '//input[@value="Connexion"]')))
-
-            cls.selenium.find_element_by_xpath('//input[@value="Connexion"]').click()
+        except:
+            login_button =  cls.selenium.find_element_by_xpath('//input[@value="Connexion"]')
+            ActionChains(cls.selenium).move_to_element_with_offset(login_button, 0, -100).click().perform()
 
     @classmethod
     def test_search_form(cls):
