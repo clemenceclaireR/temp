@@ -2,9 +2,6 @@ from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from selenium import webdriver
 from django.contrib.auth.models import User
 from selenium.webdriver.common.keys import Keys
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.action_chains import ActionChains
 from purbeurre.models.products import Products
 from purbeurre.models.categories import Categories
@@ -68,6 +65,10 @@ class SeleniumTest(StaticLiveServerTestCase):
         """
         cls.selenium.get('%s%s' % (cls.live_server_url, '/'))
         form_input = cls.selenium.find_element_by_id("id_research")
-        # form_input.send_keys('noix de coco')
-        # self.selenium.find_element_by_xpath('//input[@id="chercher"]').click()
-        #form_input.send_keys(Keys.RETURN)
+        form_input.send_keys('noix de coco')
+        #cls.selenium.find_element_by_xpath('//input[@id="chercher"]').click()
+        try:
+            form_input.send_keys(Keys.RETURN)
+        except:
+            button = cls.selenium.find_element_by_xpath('//input[@id="chercher"]')
+            ActionChains(cls.selenium).move_to_element_with_offset(button, 0, -100).click().perform()
