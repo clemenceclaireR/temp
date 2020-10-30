@@ -54,7 +54,16 @@ class SeleniumTest(StaticLiveServerTestCase):
         username_input.send_keys('test@user.fr')
         password_input = cls.selenium.find_element_by_name("password")
         password_input.send_keys('password')
-        cls.selenium.find_element_by_xpath('//input[@value="Connexion"]').click()
+        try:
+            cls.selenium.find_element_by_xpath('//input[@value="Connexion"]').click()
+        except Exception :
+        # self.selenium.execute_script("arguments[0].click();", button)
+        # validate = self.selenium.find_element_by_id('connexion')
+        # validate.send_keys(Keys.RETURN)
+            WebDriverWait(cls.selenium, 20).until(EC.visibility_of_element_located((By.XPATH,
+                                                                    '//input[@value="Connexion"]')))
+
+            cls.selenium.find_element_by_xpath('//input[@value="Connexion"]').click()
 
     @classmethod
     def test_search_form(cls):
