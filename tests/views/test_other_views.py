@@ -45,6 +45,15 @@ class IndexPageTestCase(TestCase):
         })
         self.assertRedirects(response, '/search_results/product/')
 
+    def test_filter_button_exists(self):
+        """
+        Check if filter balise exists in index template
+        """
+
+        self.assertContains(self.client.get(reverse('index')),
+                            '<p id="filter_option">Filtrer</p>',
+                            )
+
 
 class LegalInformationTestCase(TestCase):
     """
@@ -90,4 +99,3 @@ class AccountTest(TestCase):
         self.client.login(username='test', password='test')
         response = self.client.get(reverse('account'))
         self.assertEqual(response.status_code, 200)
-

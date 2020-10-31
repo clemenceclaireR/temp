@@ -11,6 +11,8 @@ urlpatterns = [
          name='saved_products'),
     url('search_results/(?P<product>.*)/$', views.search_results,
         name='search_results'),
+    url('search_filtered_results/(?P<name>.*)/(?P<nutriscore>.*)/(?P<category>.*)/$', views.search_filtered_results,
+        name='search_filtered_results'),
     url('substitutes/(?P<product>.*)/$', views.search_substitutes,
         name='substitutes'),
     url('save_done/(?P<product>.*)/$', views.save_product,

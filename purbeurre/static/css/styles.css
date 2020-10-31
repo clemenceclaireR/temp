@@ -219,6 +219,14 @@ div.error_form ul li {
     width: 10%;
 }
 
+#filter_option:hover {
+    color: blue;
+}
+
+#classic_form_option:hover {
+    color: blue;
+}
+
 /* MEDIA QUERIES  */
 
 /* small devices like smartphones */
