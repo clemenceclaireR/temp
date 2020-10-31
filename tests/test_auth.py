@@ -66,8 +66,8 @@ class UserRegistrationTest(TestCase):
                                              email="user1@test.fr")
         self.data = {
             'email': 'test@test.fr',
-            'password': 'test',
-            'password2': 'test',
+            'password': 'Str0ngP@ssword',
+            'password2': 'Str0ngP@ssword',
             'first_name': 'test',
         }
 
