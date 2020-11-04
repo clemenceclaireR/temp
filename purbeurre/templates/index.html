@@ -62,9 +62,9 @@ $(document).ready(function() {
       <div class="row d-flex justify-content-center" >
         <div  id="searchform" class="form-inline">
           <form class="form-group searchbox ui-widget col-md-12 col-md-offset-5 text-center active_padding"
-                role="form" method="post"
-                action="{% url 'index' %}">
-            {{ form.research }}
+                role="form" method="get"
+                action="{% url 'search_results' %}">
+            {{ form.name }}
             {% csrf_token %}
               <div class="input-group-append">
                 <button id="chercher" type="submit" class="btn btn-primary btn-block
@@ -79,30 +79,34 @@ $(document).ready(function() {
       <p id="classic_form_option">Retour au formulaire basique</p>
 
       <div class="row d-flex justify-content-center" >
-        <div  id="filterform" >
-          <form class="form-group searchbox ui-widget col-md-12 col-md-offset-5 text-center active_padding"
-                role="form" method="post"
-                action="{% url 'index' %}">
-             <div>
-            {{ filterform.name.errors }}
-            <label for="{{ filterform.name.id_for_label }}">Nom du produit</label>
-            {{ filterform.name }}
-            <br><p class="help_text_form">{{ filterform.name.help_text }}</p>
+        <div  id="filterform">
+          <form class=" form-group searchbox ui-widget col-md-12 col-md-offset-5 text-center active_padding"
+                role="form" method="get"
+                action="{% url 'search_results' %}">
+          <div class="responsive-inline">
+            <div class="active_padding">
+            {{ form.name.errors }}
+            <label for="{{ form.name.id_for_label }}">Nom du produit</label>
+              <div id="filter_name">
+               {{ form.name }}
+               </div>
+            <br><p class="help_text_form">{{ form.name.help_text }}</p>
         </div>
 
-          <div>
-            {{ filterform.category.errors }}
-            <label for="{{ filterform.category.id_for_label }}">Catégorie</label>
-            {{ filterform.category }}
-            <br><p class="help_text_form">{{ filterform.category.help_text }}</p>
+          <div class="active_padding">
+            {{ form.category.errors }}
+            <label for="{{ form.category.id_for_label }}">Catégorie</label>
+            {{ form.category }}
+            <br><p class="help_text_form">{{ form.category.help_text }}</p>
         </div>
 
-       <div>
-            {{ filterform.nutriscore.errors }}
-            <label for="{{ filterform.nutriscore.id_for_label }}">Valeur minimale du nutriscore</label>
-            {{ filterform.nutriscore }}
-            <br><p class="help_text_form">{{ filterform.nutriscore.help_text }}</p>
+       <div class="active_padding">
+            {{ form.nutriscore.errors }}
+            <label for="{{ form.nutriscore.id_for_label }}">Valeur minimale du nutriscore</label>
+            {{ form.nutriscore }}
+            <br><p class="help_text_form">{{ form.nutriscore.help_text }}</p>
         </div>
+            </div>
 
 
             {% csrf_token %}

@@ -3,6 +3,7 @@
 
 from django.test import TestCase
 from django.contrib.auth.models import User
+from django.urls import reverse
 from purbeurre.forms import SearchForm
 from purbeurre.models.products import Products
 from purbeurre.models.categories import Categories
@@ -38,7 +39,7 @@ class ProductViewTest(TestCase):
         """
         Results page is accessible with url name
         """
-        response = self.client.get('/search_results/nutella/')
+        response = self.client.get('/search_results?name=product')
         self.assertEqual(response.status_code, 200)
 
     def test_view_url_propose_product_already_in_favorites(self):
@@ -46,15 +47,15 @@ class ProductViewTest(TestCase):
         One of the products displayed is in user's favorites
         """
         self.client.login(username='test', password='test')
-        response = self.client.get('/search_results/nutella/')
+        response = self.client.get('/search_results?name=product')
         self.assertEqual(response.status_code, 200)
 
     def test_view_returns_last_page_if_id_page_out_of_range(self):
         """
         View return last page if page number given is out o range
         """
-        response = self.client.get('/search_results/nutella/',
-                                   {'query': '', 'page': 5})
+        response = self.client.get(reverse('search_results'),
+                                   {'query': '', 'page': 5, 'name':'product'})
         self.assertEquals(response.context['products'].number, 1)
 
     def test_view_product_description_page(self):

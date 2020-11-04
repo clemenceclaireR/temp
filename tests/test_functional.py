@@ -17,9 +17,9 @@ class SeleniumTest(StaticLiveServerTestCase):
     def setUpClass(cls):
         super().setUpClass()
         options = webdriver.ChromeOptions()
-        options.add_argument('--headless')
-        options.add_argument('--no-sandbox')
-        options.add_argument('--disable-dev-shm-usage')
+        # options.add_argument('--headless')
+        # options.add_argument('--no-sandbox')
+        # options.add_argument('--disable-dev-shm-usage')
         options.add_experimental_option("excludeSwitches", ["enable-logging"])
 
         cls.selenium = webdriver.Chrome(options=options)
@@ -46,10 +46,29 @@ class SeleniumTest(StaticLiveServerTestCase):
         password_input.send_keys('password')
         try:
             cls.selenium.find_element_by_xpath('//input[@value="Connexion"]').click()
-            time.sleep(3)
         except Exception:
             login_button = cls.selenium.find_element_by_xpath('//input[@value="Connexion"]')
             ActionChains(cls.selenium).move_to_element_with_offset(login_button, 0, -100).click().perform()
+
+    def test_register_form(cls):
+        """
+        Simulates user registering his account
+        """
+        cls.selenium.get('%s%s' % (cls.live_server_url, '/register'))
+        username_input = cls.selenium.find_element_by_name("email")
+        username_input.send_keys('newuser@user.fr')
+        username_input = cls.selenium.find_element_by_name("first_name")
+        username_input.send_keys('User')
+        password_input = cls.selenium.find_element_by_name("password")
+        password_input.send_keys('Str0ngP@ssword')
+        password_input = cls.selenium.find_element_by_name("password2")
+        password_input.send_keys('Str0ngP@ssword')
+        try:
+            cls.selenium.find_element_by_xpath('//input[@value="S\'inscrire"]').click()
+            time.sleep(3)
+        except Exception:
+            register_button = cls.selenium.find_element_by_xpath('//input[@value="S\'inscrire"]')
+            ActionChains(cls.selenium).move_to_element_with_offset(register_button, 0, -100).click().perform()
 
     def test_search_form(cls):
         """
@@ -63,10 +82,9 @@ class SeleniumTest(StaticLiveServerTestCase):
                                               (name=cls.category))
         cls.selenium.get('%s%s' % (cls.live_server_url, '/'))
         form_input = cls.selenium.find_element_by_xpath \
-            ('//div[@id="searchform"]/form[@role="form"]/input[@id="id_research"]')
+            ('//div[@id="searchform"]/form[@role="form"]/input[@id="id_name"]')
         form_input.send_keys('noix de coco')
         form_input.send_keys(Keys.RETURN)
-        time.sleep(3)
 
     def test_search_filter_form(cls):
         """
@@ -84,7 +102,8 @@ class SeleniumTest(StaticLiveServerTestCase):
         filter_button = cls.selenium.find_element_by_xpath \
             ('//p[@id="filter_option"]')
         filter_button.click()
-        name_input = cls.selenium.find_element_by_name("name")
+        name_input = cls.selenium.find_element_by_xpath \
+            ('//div[@id="filter_name"]/input[@id="id_name"]')
         name_input.send_keys('coco')
         category_input = cls.selenium.find_element_by_xpath(
             '//select[@id="id_category"]/option[text()="boisson"]')
@@ -100,3 +119,6 @@ class SeleniumTest(StaticLiveServerTestCase):
             search_button = cls.selenium.find_element_by_xpath('//button[@id="search_filter_button')
             time.sleep(5)
             ActionChains(cls.selenium).move_to_element_with_offset(search_button, 0, -100).click().perform()
+
+
+

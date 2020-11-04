@@ -9,28 +9,17 @@ class SearchForm(forms.Form):
     """
     Product search form
     """
-    research = forms.CharField(
-        label="Recherche",
-        widget=forms.TextInput(attrs={'placeholder': 'Nom de aliment',
-                                      'class': 'form-control ',
-                                      'autocomplete': 'off'})
-    )
-
-
-class FilterForm(forms.Form):
-    """
-    Product search form with filters
-    """
 
     name = forms.CharField(
         label="Recherche",
-        widget=forms.TextInput(attrs={'placeholder': 'Trouvez un aliment',
+        widget=forms.TextInput(attrs={'placeholder': 'Nom du produit',
                                       'class': 'form-control ',
                                       'autocomplete': 'off'})
     )
 
     category = forms.ModelChoiceField(queryset=Categories.objects.all()
-                                      , widget=forms.Select(attrs={'class': 'form-control'}))
+                                      , widget=forms.Select(attrs={'class': 'form-control'})
+                                      , required=False)
 
     nutriscore_choice = (
         ('b', "B"),
@@ -40,4 +29,5 @@ class FilterForm(forms.Form):
     )
     nutriscore = forms.ChoiceField(choices=nutriscore_choice,
                                    widget=forms.Select(attrs={'class': 'form-control'})
-                                   )
+                                   , required=False)
+

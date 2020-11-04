@@ -64,10 +64,17 @@ class UserRegistrationTest(TestCase):
                                              username="user1",
                                              password="test",
                                              email="user1@test.fr")
-        self.data = {
+        self.strong_data = {
             'email': 'test@test.fr',
             'password': 'Str0ngP@ssword',
             'password2': 'Str0ngP@ssword',
+            'first_name': 'test',
+        }
+
+        self.weak_data = {
+            'email': 'test@test.fr',
+            'password': 'weak_psd',
+            'password2': 'weak_psd',
             'first_name': 'test',
         }
 
@@ -82,10 +89,17 @@ class UserRegistrationTest(TestCase):
         """
         Add user when posted data is correct
         """
-        self.client.post(reverse("register"), data=self.data, follow=True,
+        self.client.post(reverse("register"), data=self.strong_data, follow=True,
                                     HTTP_X_REQUESTED='XMLHttpRequest')
         self.assertEqual(User.objects.all().count(), 2)
 
+    def test_register_password_too_weak(self):
+        """
+        Does'nt add user when password does'nt met with validators criteria
+        """
+        self.client.post(reverse("register"), data=self.weak_data, follow=True,
+                                    HTTP_X_REQUESTED='XMLHttpRequest')
+        self.assertEqual(User.objects.all().count(), 1)
 
     def test_register_psw_dont_match(self):
         """

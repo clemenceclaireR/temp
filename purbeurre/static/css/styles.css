@@ -220,16 +220,33 @@ div.error_form ul li {
 }
 
 #filter_option:hover {
-    color: blue;
+    color: #e9c616;
 }
 
 #classic_form_option:hover {
-    color: blue;
+    color: #e9c616;
 }
+
 
 /* MEDIA QUERIES  */
 
-/* small devices like smartphones */
+@media all and (max-width: 979px)  {
+/* column */
+   .responsive-inline {
+      display: inline;
+      width: 100%;
+  }
+}
+
+@media all and (min-width: 980px) {
+/* line */
+    .responsive-inline {
+      display: flex;
+      flex-flow: row-wrap;
+      align-items: center;
+    }
+}
+
 @media all and (max-width: 800px) {
 
     .user_profile_picture {

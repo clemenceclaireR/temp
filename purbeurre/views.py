@@ -2,11 +2,13 @@
 # -*- Coding: UTF-8 -*-
 
 from django.shortcuts import render, redirect
+from django.urls import reverse
+from urllib.parse import urlencode
 from django.contrib import messages
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from .forms import SearchForm, FilterForm
+from .forms import SearchForm
 from .models.products import Products
 from .models.favorites import Favorites
 from .models.categories import Categories
@@ -16,65 +18,8 @@ def index(request):
     """
     Display homepage with search forms
     """
-    if request.method == 'POST':
-        form = SearchForm(request.POST)
-        if form.is_valid():
-            product = form.cleaned_data['research']
-            return redirect('search_results/' + product + '/')
-        filterform = FilterForm(request.POST)
-        if filterform.is_valid():
-            name = filterform.cleaned_data['name']
-            nutriscore = filterform.cleaned_data['nutriscore']
-            category = filterform.cleaned_data['category']
-            return redirect('search_filtered_results/' + name + '/' + nutriscore + '/' + str(category) )
-    else:
-        form = SearchForm()
-        filterform = FilterForm()
-    return render(request, 'index.html', locals())
-
-
-def search_filtered_results(request, name, nutriscore, category):
-    """
-    Search for a product written in the search form by a user
-    """
     form = SearchForm()
-    current_user = request.user
-
-    nutriscore_scale = list(('b', 'c', 'd', 'e'))
-    index = nutriscore_scale.index(nutriscore)
-    better_nutriscore = nutriscore_scale[:index]
-    cat = Categories.objects.get(name=category)
-    product_list = Products.objects.\
-        filter(name__icontains=name, category=cat.id, nutriscore__in=better_nutriscore )
-    # if user is authenticated, get his favorites, else, pass
-    try:
-        for item in product_list:
-            # for each product to display, check if the user added it to its favs
-            # in order to display whether the product has already been saved or not
-            favorites = Favorites.objects.filter(user=User.objects.get
-                                                 (id=current_user.id),
-                                                 substitute=item.id)\
-                                                .prefetch_related('user', 'substitute')
-            if favorites:
-                item.is_favorite = True
-            else:
-                item.is_favorite = False
-
-    except User.DoesNotExist:
-        pass
-
-    paginator = Paginator(product_list, 9)  # 9 products in each page
-    page = request.GET.get('page')
-    try:
-        products = paginator.page(page)
-    except PageNotAnInteger:
-        # If page is not an integer deliver the first page
-        products = paginator.page(1)
-    except EmptyPage:
-        # If page is out of range deliver last page of results
-        products = paginator.page(paginator.num_pages)
-
-    return render(request, 'purbeurre/search_results.html', locals())
+    return render(request, 'index.html', locals())
 
 
 def legal_information(request):
@@ -85,42 +30,67 @@ def legal_information(request):
     return render(request, 'legal_information.html', locals())
 
 
-def search_results(request, product):
+def search_results(request, product='', *args):
     """
     Search for a product written in the search form by a user
     """
-    form = SearchForm()
+    form = SearchForm(request.GET)
     current_user = request.user
+    nutriscore_scale = list(('b', 'c', 'd', 'e'))
 
-    product_list = Products.objects.\
-        filter(name__icontains=product)
-    # if user is authenticated, get his favorites, else, pass
-    try:
-        for item in product_list:
-            # for each product to display, check if the user added it to its favs
-            # in order to display whether the product has already been saved or not
-            favorites = Favorites.objects.filter(user=User.objects.get
-                                                 (id=current_user.id),
-                                                 substitute=item.id)\
-                                                .prefetch_related('user', 'substitute')
-            if favorites:
-                item.is_favorite = True
-            else:
-                item.is_favorite = False
+    if form.is_valid():
+        name = form.cleaned_data['name']
+        nutriscore = form.cleaned_data['nutriscore']
+        category = form.cleaned_data['category']
 
-    except User.DoesNotExist:
-        pass
+        if nutriscore and category:
+            index = nutriscore_scale.index(nutriscore)
+            # get all the nustricores with value equal or superior than the one selected
+            accepted_nutriscore = nutriscore_scale[:index + 1]
+            cat = Categories.objects.get(name=category)
+            product_list = Products.objects. \
+                filter(name__icontains=name, category=cat.id, nutriscore__in=accepted_nutriscore)
+        elif nutriscore and not category:
+            index = nutriscore_scale.index(nutriscore)
+            # get all the nustricores with value equal or superior than the one selected
+            accepted_nutriscore = nutriscore_scale[:index + 1]
+            product_list = Products.objects. \
+                filter(name__icontains=name, nutriscore__in=accepted_nutriscore)
+        elif not nutriscore and category:
+            cat = Categories.objects.get(name=category)
+            product_list = Products.objects. \
+                filter(name__icontains=name, category=cat.id)
+        else:
+            product_list = Products.objects. \
+                filter(name__icontains=name)
 
-    paginator = Paginator(product_list, 9)  # 9 products in each page
-    page = request.GET.get('page')
-    try:
-        products = paginator.page(page)
-    except PageNotAnInteger:
-        # If page is not an integer deliver the first page
-        products = paginator.page(1)
-    except EmptyPage:
-        # If page is out of range deliver last page of results
-        products = paginator.page(paginator.num_pages)
+        # if user is authenticated, get his favorites, else, pass
+        try:
+            for item in product_list:
+                # for each product to display, check if the user added it to its favs
+                # in order to display whether the product has already been saved or not
+                favorites = Favorites.objects.filter(user=User.objects.get
+                (id=current_user.id),
+                                                     substitute=item.id) \
+                    .prefetch_related('user', 'substitute')
+                if favorites:
+                    item.is_favorite = True
+                else:
+                    item.is_favorite = False
+
+        except User.DoesNotExist:
+            pass
+
+        paginator = Paginator(product_list, 9)  # 9 products in each page
+        page = request.GET.get('page')
+        try:
+            products = paginator.page(page)
+        except PageNotAnInteger:
+            # If page is not an integer deliver the first page
+            products = paginator.page(1)
+        except EmptyPage:
+            # If page is out of range deliver last page of results
+            products = paginator.page(paginator.num_pages)
 
     return render(request, 'purbeurre/search_results.html', locals())
 
@@ -221,7 +191,7 @@ def search_substitutes(request, product):
         # in order to display whether the product has already been saved or not
         for item in product_list:
             favorites = Favorites.objects.filter(user=User.objects.get
-                                                 (id=current_user.id),
+            (id=current_user.id),
                                                  substitute=item.id).prefetch_related('user', 'substitute')
             if favorites:
                 item.is_favorite = True

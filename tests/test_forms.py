@@ -17,13 +17,13 @@ class SearchFormTest(TestCase):
         Checks field label name
         """
         form = SearchForm()
-        self.assertTrue(form.fields['research'].label == 'Recherche')
+        self.assertTrue(form.fields['name'].label == 'Recherche')
 
     def test_search_form(self):
         """
         Checks if search form is valid
         """
-        form_data = {'research': 'something'}
+        form_data = {'name': 'something'}
         form = SearchForm(data=form_data)
         self.assertTrue(form.is_valid())
 

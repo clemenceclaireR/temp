@@ -36,14 +36,14 @@ class IndexPageTestCase(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'index.html')
 
-    def test_post_search_form_is_valid(self):
+    def test_search_form_is_valid(self):
         """
         Search form works from index page
         """
-        response = self.client.post(reverse('index'), {
-            'research': 'product'
+        response = self.client.get(reverse('search_results'), {
+            'name': 'product'
         })
-        self.assertRedirects(response, '/search_results/product/')
+        self.assertTemplateUsed(response, 'purbeurre/search_results.html')
 
     def test_filter_button_exists(self):
         """

@@ -41,8 +41,8 @@
           </button>
           <div class="collapse navbar-collapse" id="navbarResponsive">
             <ul class="navbar-nav ml-auto menu ">
-              <form class="form-inline my-2 my-lg-0" role="form" method="post" action="{% url 'index' %}">
-                 {{ form.research }}
+              <form class="form-inline my-2 my-lg-0" role="form" method="get" action="{% url 'search_results' %}">
+                 {{ form.name }}
                  {% csrf_token %}
              </form>
 
