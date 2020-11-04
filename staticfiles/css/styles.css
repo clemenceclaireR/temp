@@ -230,17 +230,16 @@ div.error_form ul li {
 
 /* MEDIA QUERIES  */
 
-/* small devices like smartphones */
-@media all and (max-height: 799px) and (max-width: 499px)  {
-
+@media all and (max-width: 979px)  {
+/* column */
    .responsive-inline {
       display: inline;
       width: 100%;
   }
 }
 
-@media all and (min-height: 800px)and (min-width: 500px) {
-
+@media all and (min-width: 980px) {
+/* line */
     .responsive-inline {
       display: flex;
       flex-flow: row-wrap;
