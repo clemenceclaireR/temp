@@ -114,7 +114,6 @@ class UserRegistrationTest(TestCase):
         }, follow=True, HTTP_X_REQUESTED='XMLHttpRequest')
         self.assertEqual(User.objects.all().count(), 1)
 
-
     def test_register_email_alrd_registered(self):
         """
         Doesn't add user when entered email in posted data

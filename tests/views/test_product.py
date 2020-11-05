@@ -4,7 +4,6 @@
 from django.test import TestCase
 from django.contrib.auth.models import User
 from django.urls import reverse
-from purbeurre.forms import SearchForm
 from purbeurre.models.products import Products
 from purbeurre.models.categories import Categories
 from purbeurre.models.favorites import Favorites
@@ -49,7 +48,7 @@ class ProductViewTest(TestCase):
         """
         self.client.login(username='test', password='test')
         response = self.client.get(reverse('search_results'),
-                                   {'query': '','name': 'nutella'})
+                                   {'query': '', 'name': 'nutella'})
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'purbeurre/search_results.html')
 
@@ -67,3 +66,24 @@ class ProductViewTest(TestCase):
         """
         response = self.client.get('/product_description/nutella/')
         self.assertEqual(response.status_code, 200)
+
+    def test_search_form_is_valid(self):
+        """
+        Research from basic search form renders results template
+        """
+        response = self.client.get(reverse('search_results'), {
+            'name': 'product'
+        })
+        self.assertTemplateUsed(response, 'purbeurre/search_results.html')
+
+    def test_filter_search_form_is_valid(self):
+        """
+        Checks if search from with filter parameters give results from
+        the queryset
+        """
+        response = self.client.get(reverse('search_results'), {
+            'name': 'nutella',
+            'category': '1',
+            'nutriscore': 'd'
+        })
+        self.assertTrue(response.context['product_list'])

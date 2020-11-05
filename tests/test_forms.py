@@ -23,7 +23,7 @@ class SearchFormTest(TestCase):
         """
         Checks if search form is valid
         """
-        form_data = {'name': 'something'}
+        form_data = {'name': 'something', 'nutriscore': 'c'}
         form = SearchForm(data=form_data)
         self.assertTrue(form.is_valid())
 
@@ -32,6 +32,7 @@ class RegisterFormTest(TestCase):
     """
     Form tests for register form
     """
+
     def setUp(self):
         self.data = {
             'username': 'test2',

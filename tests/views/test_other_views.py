@@ -36,15 +36,6 @@ class IndexPageTestCase(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'index.html')
 
-    def test_search_form_is_valid(self):
-        """
-        Search form works from index page
-        """
-        response = self.client.get(reverse('search_results'), {
-            'name': 'product'
-        })
-        self.assertTemplateUsed(response, 'purbeurre/search_results.html')
-
     def test_filter_button_exists(self):
         """
         Check if filter balise exists in index template

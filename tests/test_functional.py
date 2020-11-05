@@ -25,15 +25,23 @@ class SeleniumTest(StaticLiveServerTestCase):
         cls.selenium = webdriver.Chrome(options=options)
         cls.selenium.implicitly_wait(10)
 
+    @classmethod
+    def tearDownClass(cls):
+        cls.selenium.quit()
+        super().tearDownClass()
+
+    def setUp(cls):
         cls.user = User.objects.create_user(username="test",
                                             first_name="test",
                                             password="password",
                                             email="test@user.fr")
 
-    @classmethod
-    def tearDownClass(cls):
-        cls.selenium.quit()
-        super().tearDownClass()
+        cls.category = Categories.objects.create(id=1, name="boisson")
+        cls.product = Products.objects.create(name="noix de coco",
+                                              nutriscore='c',
+                                              image="https://static.openfoodfacts.org/images/products/541/004/100/1204/front_fr.97.400.jpg",
+                                              category=Categories.objects.get
+                                              (name=cls.category))
 
     def test_login(cls):
         """
@@ -45,9 +53,11 @@ class SeleniumTest(StaticLiveServerTestCase):
         password_input = cls.selenium.find_element_by_name("password")
         password_input.send_keys('password')
         try:
+            time.sleep(1)
             cls.selenium.find_element_by_xpath('//input[@value="Connexion"]').click()
         except Exception:
             login_button = cls.selenium.find_element_by_xpath('//input[@value="Connexion"]')
+            time.sleep(1)
             ActionChains(cls.selenium).move_to_element_with_offset(login_button, 0, -100).click().perform()
 
     def test_register_form(cls):
@@ -64,22 +74,18 @@ class SeleniumTest(StaticLiveServerTestCase):
         password_input = cls.selenium.find_element_by_name("password2")
         password_input.send_keys('Str0ngP@ssword')
         try:
+            time.sleep(1)
             cls.selenium.find_element_by_xpath('//input[@value="S\'inscrire"]').click()
-            time.sleep(3)
         except Exception:
             register_button = cls.selenium.find_element_by_xpath('//input[@value="S\'inscrire"]')
+            time.sleep(1)
             ActionChains(cls.selenium).move_to_element_with_offset(register_button, 0, -100).click().perform()
 
     def test_search_form(cls):
         """
         Takes user to search form with a product name to put inside form
         """
-        cls.category = Categories.objects.create(id=1, name="boisson")
-        cls.product = Products.objects.create(name="noix de coco",
-                                              nutriscore='c',
-                                              image="https://static.openfoodfacts.org/images/products/541/004/100/1204/front_fr.97.400.jpg",
-                                              category=Categories.objects.get
-                                              (name=cls.category))
+
         cls.selenium.get('%s%s' % (cls.live_server_url, '/'))
         form_input = cls.selenium.find_element_by_xpath \
             ('//div[@id="searchform"]/form[@role="form"]/input[@id="id_name"]')
@@ -91,12 +97,6 @@ class SeleniumTest(StaticLiveServerTestCase):
         Simulates user clicking on filter balise in index template, and
         then make its research with filters parameters
         """
-        cls.category = Categories.objects.create(id=1, name="boisson")
-        cls.product = Products.objects.create(name="noix de coco",
-                                              nutriscore='c',
-                                              image="https://static.openfoodfacts.org/images/products/541/004/100/1204/front_fr.97.400.jpg",
-                                              category=Categories.objects.get
-                                              (name=cls.category))
 
         cls.selenium.get('%s%s' % (cls.live_server_url, '/'))
         filter_button = cls.selenium.find_element_by_xpath \
@@ -108,16 +108,15 @@ class SeleniumTest(StaticLiveServerTestCase):
         category_input = cls.selenium.find_element_by_xpath(
             '//select[@id="id_category"]/option[text()="boisson"]')
         category_input.click()
-        time.sleep(2)
         nutriscore_input = cls.selenium.find_element_by_xpath(
             '//select[@id="id_nutriscore"]/option[text()="D"]')
         nutriscore_input.click()
         try:
+            time.sleep(1)
             cls.selenium.find_element_by_xpath('//button[@id="search_filter_button"]').click()
-            time.sleep(3)
         except Exception:
             search_button = cls.selenium.find_element_by_xpath('//button[@id="search_filter_button')
-            time.sleep(5)
+            time.sleep(1)
             ActionChains(cls.selenium).move_to_element_with_offset(search_button, 0, -100).click().perform()
 
 

@@ -39,7 +39,7 @@ class SubstituteProductTest(TestCase):
 
     def test_view_url_exists_at_desired_location(self):
         """
-        Results page is accessible with url name
+        Substitute results page is accessible with url name
         """
         response = self.client.get('/substitutes/nutella/')
         self.assertEqual(response.status_code, 200)
