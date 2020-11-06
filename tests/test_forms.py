@@ -2,7 +2,6 @@
 # -*- Coding: UTF-8 -*-
 
 from django.test import TestCase
-from django.contrib.auth.models import User
 from purbeurre.forms import SearchForm
 from user.forms import UserRegistrationForm
 
@@ -34,6 +33,7 @@ class RegisterFormTest(TestCase):
     """
 
     def setUp(self):
+
         self.data = {
             'username': 'test2',
             'email': 'test@test.fr',

@@ -101,7 +101,7 @@ class UserRegistrationTest(TestCase):
                                     HTTP_X_REQUESTED='XMLHttpRequest')
         self.assertEqual(User.objects.all().count(), 1)
 
-    def test_register_psw_dont_match(self):
+    def test_register_psw_do_not_match(self):
         """
         Doesn't add user when password don't match in posted data
         """

@@ -3,6 +3,7 @@ from selenium import webdriver
 from django.contrib.auth.models import User
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.action_chains import ActionChains
+from selenium.common.exceptions import ElementClickInterceptedException
 import time
 from purbeurre.models.products import Products
 from purbeurre.models.categories import Categories
@@ -55,7 +56,7 @@ class SeleniumTest(StaticLiveServerTestCase):
         try:
             time.sleep(1)
             cls.selenium.find_element_by_xpath('//input[@value="Connexion"]').click()
-        except Exception:
+        except ElementClickInterceptedException:
             login_button = cls.selenium.find_element_by_xpath('//input[@value="Connexion"]')
             time.sleep(1)
             ActionChains(cls.selenium).move_to_element_with_offset(login_button, 0, -100).click().perform()
@@ -76,7 +77,7 @@ class SeleniumTest(StaticLiveServerTestCase):
         try:
             time.sleep(1)
             cls.selenium.find_element_by_xpath('//input[@value="S\'inscrire"]').click()
-        except Exception:
+        except ElementClickInterceptedException:
             register_button = cls.selenium.find_element_by_xpath('//input[@value="S\'inscrire"]')
             time.sleep(1)
             ActionChains(cls.selenium).move_to_element_with_offset(register_button, 0, -100).click().perform()
@@ -114,7 +115,7 @@ class SeleniumTest(StaticLiveServerTestCase):
         try:
             time.sleep(1)
             cls.selenium.find_element_by_xpath('//button[@id="search_filter_button"]').click()
-        except Exception:
+        except ElementClickInterceptedException:
             search_button = cls.selenium.find_element_by_xpath('//button[@id="search_filter_button')
             time.sleep(1)
             ActionChains(cls.selenium).move_to_element_with_offset(search_button, 0, -100).click().perform()

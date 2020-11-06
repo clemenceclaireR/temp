@@ -56,10 +56,6 @@ def search_results(request, product='', *args):
             accepted_nutriscore = nutriscore_scale[:index + 1]
             product_list = Products.objects. \
                 filter(name__icontains=name, nutriscore__in=accepted_nutriscore)
-        elif not nutriscore and category:
-            cat = Categories.objects.get(name=category)
-            product_list = Products.objects. \
-                filter(name__icontains=name, category=cat.id)
         else:
             product_list = Products.objects. \
                 filter(name__icontains=name)
