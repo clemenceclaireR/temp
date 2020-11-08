@@ -219,12 +219,13 @@ div.error_form ul li {
     width: 10%;
 }
 
-#filter_option:hover {
-    color: #e9c616;
+#filter_option, #classic_form_option {
+    color: #e9c616 ;
+    font-weight: bold;
 }
 
-#classic_form_option:hover {
-    color: #e9c616;
+#filter_option:hover, #classic_form_option:hover {
+    color: #c45525;
 }
 
 

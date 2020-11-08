@@ -19,7 +19,7 @@ script:
 branches:
   only:
     - staging
-    - 'p11'
+    - p11
 
 addons:
   chrome: stable

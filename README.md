@@ -1,16 +1,16 @@
-### **Purbeurre (production + new functionalities)**
+### **Purbeurre (production settings + new features)**
 
 #### **Description**
 
 This projects brings together the 8th, 10th and 11th projects which
 has been developed for Openclassrooms.
 This project is based on the 8th project which is updated
-in order to be deployed on distant server.
+in order to be deployed on distant server and to be extended with new features.
 
-With project 10, settings files have been updated accordingly 
+**With project 10**, settings files have been updated accordingly 
 and Sentry has been integrated along with continuous integration.
 
-In this project, 2 fonctionalities has been added :
+**With project 11**, 2 features has been added :
 
 - Strong password verification
 

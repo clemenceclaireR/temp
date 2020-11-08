@@ -30,7 +30,7 @@ def legal_information(request):
     return render(request, 'legal_information.html', locals())
 
 
-def search_results(request, product='', *args):
+def search_results(request):
     """
     Search for a product written in the search form by a user
     """
